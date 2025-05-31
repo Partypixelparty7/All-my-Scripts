@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partypixelparty7 Scripts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00ffcc; /* Ein leuchtendes Türkis/Mint */
+            --secondary-color: #ff00ff; /* Ein leuchtendes Magenta */
+            --background-color: #1a1a2e; /* Dunkelblau/Violett */
+            --card-background: rgba(40, 42, 54, 0.8); /* Leicht transparentes Dunkelgrau */
+            --text-color: #e0e0e0;
+            --text-color-darker: #a0a0a0;
+            --font-family: 'Poppins', sans-serif;
+            --glow-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color), 0 0 15px var(--primary-color);
+            --glow-shadow-secondary: 0 0 5px var(--secondary-color), 0 0 10px var(--secondary-color), 0 0 15px var(--secondary-color);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden; /* Verhindert horizontales Scrollen durch Animationen */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Startet oben, damit man scrollen kann wenn nötig */
+            min-height: 100vh;
+            padding: 20px;
+
+            /* Animierter Gradient Hintergrund */
+            background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #e94560);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: var(--card-background);
+            backdrop-filter: blur(10px); /* Frostiger Glas Effekt */
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .site-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .site-header h1 {
+            font-size: 2.8em; /* Responsive Schriftgröße */
+            font-weight: 700;
+            color: var(--primary-color);
+            text-shadow: var(--glow-shadow);
+            margin-bottom: 10px;
+            position: relative; /* Für Glitch-Effekt */
+        }
+
+        /* Glitch Effekt für den Titel (optional, aber "animiert") */
+        .glitch {
+            position: relative;
+            color: var(--primary-color);
+            animation: glitch-skew 1s infinite linear alternate-reverse;
+        }
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit; /* Wichtig damit der BG nicht überdeckt */
+        }
+        .glitch::before {
+            left: 2px;
+            text-shadow: -1px 0 var(--secondary-color);
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            left: -2px;
+            text-shadow: -1px 0 var(--primary-color), 1px 1px var(--secondary-color);
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(22px, 9999px, 98px, 0); transform: skew(0.3deg); }
+            5% { clip: rect(45px, 9999px, 18px, 0); transform: skew(0.5deg); }
+            10% { clip: rect(60px, 9999px, 50px, 0); transform: skew(0.1deg); }
+            15% { clip: rect(30px, 9999px, 75px, 0); transform: skew(-0.2deg); }
+            20% { clip: rect(90px, 9999px, 25px, 0); transform: skew(0.4deg); }
+            25% { clip: rect(15px, 9999px, 80px, 0); transform: skew(-0.1deg); }
+            30% { clip: rect(55px, 9999px, 40px, 0); transform: skew(0.25deg); }
+            /* ... weitere zufällige Werte für den Glitch ... */
+            100% { clip: rect(80px, 9999px, 5px, 0); transform: skew(0.1deg); }
+        }
+        @keyframes glitch-anim2 {
+            0% { clip: rect(75px, 9999px, 12px, 0); transform: skew(-0.2deg); }
+            5% { clip: rect(10px, 9999px, 95px, 0); transform: skew(0.35deg); }
+            10% { clip: rect(40px, 9999px, 65px, 0); transform: skew(-0.3deg); }
+            15% { clip: rect(80px, 9999px, 20px, 0); transform: skew(0.15deg); }
+            20% { clip: rect(25px, 9999px, 70px, 0); transform: skew(-0.4deg); }
+            25% { clip: rect(65px, 9999px, 30px, 0); transform: skew(0.2deg); }
+            30% { clip: rect(5px, 9999px, 85px, 0); transform: skew(-0.25deg); }
+            /* ... weitere zufällige Werte ... */
+            100% { clip: rect(5px, 9999px, 105px, 0); transform: skew(-0.4deg); }
+        }
+        @keyframes glitch-skew {
+          0% { transform: skew(0deg); }
+          10% { transform: skew(0.2deg); }
+          20% { transform: skew(-0.1deg); }
+          30% { transform: skew(0.3deg); }
+          40% { transform: skew(-0.2deg); }
+          50% { transform: skew(0.1deg); }
+          60% { transform: skew(-0.3deg); }
+          70% { transform: skew(0.25deg); }
+          80% { transform: skew(-0.15deg); }
+          90% { transform: skew(0.05deg); }
+          100% { transform: skew(-0.1deg); }
+        }
+
+
+        .site-header .subtitle {
+            font-size: 1.2em;
+            color: var(--text-color-darker);
+            font-weight: 300;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive Spalten */
+            gap: 25px;
+            padding: 20px 0;
+        }
+
+        .script-button {
+            background: linear-gradient(145deg, var(--primary-color), var(--secondary-color));
+            color: #000; /* Dunkler Text für Kontrast auf hellem Button */
+            text-decoration: none;
+            padding: 18px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+            text-align: center;
+            display: block; /* Damit er die volle Breite des Grid-Cells einnimmt */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-size 0.5s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            background-size: 200% auto; /* Für Hover-Effekt des Gradients */
+            animation: fadeInButtons 0.5s ease-out forwards;
+            opacity: 0; /* Startet unsichtbar für Animation */
+        }
+
+        /* Gestaffelte Animation für Buttons */
+        .button-grid a:nth-child(1) { animation-delay: 0.2s; }
+        .button-grid a:nth-child(2) { animation-delay: 0.3s; }
+        .button-grid a:nth-child(3) { animation-delay: 0.4s; }
+        .button-grid a:nth-child(4) { animation-delay: 0.5s; }
+        .button-grid a:nth-child(5) { animation-delay: 0.6s; }
+        .button-grid a:nth-child(6) { animation-delay: 0.7s; }
+        .button-grid a:nth-child(7) { animation-delay: 0.8s; }
+        .button-grid a:nth-child(8) { animation-delay: 0.9s; }
+        .button-grid a:nth-child(9) { animation-delay: 1.0s; }
+        .button-grid a:nth-child(10) { animation-delay: 1.1s; }
+
+
+        @keyframes fadeInButtons {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .script-button:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3), var(--glow-shadow);
+            background-position: right center; /* Ändert Gradient Position */
+        }
+
+        .script-button::before { /* Kleiner Shine-Effekt beim Hover */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            transition: left 0.6s ease;
+        }
+
+        .script-button:hover::before {
+            left: 120%;
+        }
+
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-color-darker);
+            font-size: 0.9em;
+        }
+
+        /* Media Queries für kleinere Bildschirme */
+        @media (max-width: 768px) {
+            .site-header h1 {
+                font-size: 2.2em;
+            }
+            .site-header .subtitle {
+                font-size: 1em;
+            }
+            .button-grid {
+                grid-template-columns: 1fr; /* Einspaltig auf kleinen Screens */
+            }
+            .script-button {
+                padding: 15px 20px;
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            .site-header h1 {
+                font-size: 1.8em;
+            }
+             .glitch::before, .glitch::after {
+                /* Glitch Effekt für sehr kleine Screens ggf. vereinfachen oder deaktivieren,
+                   indem man die folgenden Zeilen einkommentiert: */
+                /* display: none; */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <h1 class="glitch" data-text="Partypixelparty7 Scripts">Partypixelparty7 Scripts</h1>
+            <p class="subtitle">Deine Sammlung cooler Tampermonkey Scripts & Projekte</p>
+        </header>
+
+        <main class="button-grid">
+            <!-- ANLEITUNG:
+                Für jeden Knopf:
+                1. Ändere den Text innerhalb des <a>-Tags (zwischen > und <) für die Beschriftung.
+                2. Ändere den Wert von href="..." auf den Link zu deinem Script/Projekt.
+            -->
+
+            <!-- Knopf 1 -->
+            <a href="DEIN_LINK_HIER_1" class="script-button">
+                <!-- Hier Knopf 1 Beschriftung ändern -->
+                Mein erstes Super-Script
+            </a>
+            <!-- :Knopf 1: DEIN_LINK_HIER_1 -->
+
+            <!-- Knopf 2 -->
+            <a href="DEIN_LINK_HIER_2" class="script-button">
+                <!-- Hier Knopf 2 Beschriftung ändern -->
+                Projekt "Automatisierer"
+            </a>
+            <!-- :Knopf 2: DEIN_LINK_HIER_2 -->
+
+            <!-- Knopf 3 -->
+            <a href="DEIN_LINK_HIER_3" class="script-button">
+                <!-- Hier Knopf 3 Beschriftung ändern -->
+                YouTube Enhancer
+            </a>
+            <!-- :Knopf 3: DEIN_LINK_HIER_3 -->
+
+            <!-- Knopf 4 -->
+            <a href="DEIN_LINK_HIER_4" class="script-button">
+                <!-- Hier Knopf 4 Beschriftung ändern -->
+                Reddit Dark Mode Fix
+            </a>
+            <!-- :Knopf 4: DEIN_LINK_HIER_4 -->
+
+            <!-- Knopf 5 -->
+            <a href="DEIN_LINK_HIER_5" class="script-button">
+                <!-- Hier Knopf 5 Beschriftung ändern -->
+                Nützliches Tool X
+            </a>
+            <!-- :Knopf 5: DEIN_LINK_HIER_5 -->
+
+            <!-- Knopf 6 -->
+            <a href="DEIN_LINK_HIER_6" class="script-button">
+                <!-- Hier Knopf 6 Beschriftung ändern -->
+                Script für Forum Y
+            </a>
+            <!-- :Knopf 6: DEIN_LINK_HIER_6 -->
+
+            <!-- Knopf 7 -->
+            <a href="DEIN_LINK_HIER_7" class="script-button">
+                <!-- Hier Knopf 7 Beschriftung ändern -->
+                Geheimes Projekt Z
+            </a>
+            <!-- :Knopf 7: DEIN_LINK_HIER_7 -->
+
+            <!-- Knopf 8 -->
+            <a href="DEIN_LINK_HIER_8" class="script-button">
+                <!-- Hier Knopf 8 Beschriftung ändern -->
+                UI-Verbesserung für Seite A
+            </a>
+            <!-- :Knopf 8: DEIN_LINK_HIER_8 -->
+
+            <!-- Knopf 9 -->
+            <a href="DEIN_LINK_HIER_9" class="script-button">
+                <!-- Hier Knopf 9 Beschriftung ändern -->
+                Kleiner Helfer B
+            </a>
+            <!-- :Knopf 9: DEIN_LINK_HIER_9 -->
+
+            <!-- Knopf 10 -->
+            <a href="DEIN_LINK_HIER_10" class="script-button">
+                <!-- Hier Knopf 10 Beschriftung ändern -->
+                Noch ein Script
+            </a>
+            <!-- :Knopf 10: DEIN_LINK_HIER_10 -->
+
+        </main>
+
+        <footer>
+            <p>© <span id="currentYear"></span> Partypixelparty7. Alle Rechte vorbehalten.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
