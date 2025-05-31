@@ -26,15 +26,7 @@
             --border-radius-md: 10px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
+        /* ... (Restliches CSS von oben bleibt gleich) ... */
 
         body {
             font-family: var(--font-main);
@@ -43,8 +35,8 @@
             line-height: 1.65;
             overflow-x: hidden;
             display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Start content at the top */
+            justify-content: center; /* Zentriert den Hauptcontainer */
+            align-items: flex-start; 
             min-height: 100vh;
             padding: 30px 15px;
             position: relative;
@@ -67,7 +59,7 @@
             position: absolute;
             background-color: white;
             border-radius: 50%;
-            opacity: 0.7; /* Slightly less opaque for better blending */
+            opacity: 0.7; 
             pointer-events: none;
             animation: snowfall-animation linear infinite;
         }
@@ -81,56 +73,53 @@
             }
         }
 
-        /* Project Image Styling */
+        /* Project Image Styling - ÜBERARBEITET */
         .project-image-showcase {
-            position: fixed; /* Fixed to viewport or absolute to body */
-            left: 50px; /* Adjust as needed */
+            position: fixed; 
+            left: 30px; /* Startposition, wird ggf. durch JS angepasst */
             top: 50%;
-            transform: translateY(-50%) perspective(1200px) rotateY(-25deg) rotateX(5deg) scale(0.9);
-            width: 220px; /* Approximate width of the menu in the image if displayed at this size */
-            height: 380px; /* Approximate height */
-            border-radius: 15px; /* Matches menu rounding */
-            overflow: hidden;
-            box-shadow: -10px 10px 30px rgba(0,0,0,0.5), 0 0 15px var(--accent-glow);
-            z-index: 0; /* Behind main container if it might overlap controls */
+            /* 3D Effekt nach RECHTS */
+            transform: translateY(-50%) perspective(1500px) rotateY(25deg) rotateX(3deg) scale(1);
+            /* Breite und Höhe des Bildes anpassen, um es vollständig und größer darzustellen */
+            width: 450px; /* Beispielbreite - anpassen nach Bedarf */
+            /* Höhe automatisch anpassen oder festlegen, wenn nötig */
+            /* height: auto; oder einen spezifischen Wert */
+            border-radius: 8px; /* Leichte Abrundung für den Rahmen des Bildes */
+            box-shadow: 10px 10px 35px rgba(0,0,0,0.6), 0 0 20px var(--accent-glow);
+            z-index: 0; 
             opacity: 0;
             animation: projectImageEntrance 1s ease-out 1.5s forwards;
-            border: 1px solid var(--border-faint);
-            transition: transform 0.4s ease-out, box-shadow 0.4s ease-out;
+            border: 2px solid var(--border-faint); /* Sichtbarer Rahmen */
+            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease-out;
+            background-color: var(--bg-surface); /* Hintergrund für den Fall, dass das Bild Ladezeit hat */
         }
         .project-image-showcase:hover{
-            transform: translateY(-50%) perspective(1200px) rotateY(-15deg) rotateX(2deg) scale(0.95);
-            box-shadow: -5px 5px 25px rgba(0,0,0,0.4), 0 0 25px var(--accent-glow);
+            transform: translateY(-50%) perspective(1500px) rotateY(15deg) rotateX(1deg) scale(1.05);
+            box-shadow: 5px 5px 30px rgba(0,0,0,0.5), 0 0 30px var(--accent-glow);
         }
 
         @keyframes projectImageEntrance {
-            from { opacity: 0; transform: translateY(-50%) perspective(1200px) rotateY(-25deg) rotateX(5deg) scale(0.8) translateX(-50px); }
-            to { opacity: 0.7; transform: translateY(-50%) perspective(1200px) rotateY(-25deg) rotateX(5deg) scale(0.9) translateX(0); }
+            from { opacity: 0; transform: translateY(-50%) perspective(1500px) rotateY(25deg) rotateX(3deg) scale(0.85) translateX(-60px); }
+            to { opacity: 0.85; transform: translateY(-50%) perspective(1500px) rotateY(25deg) rotateX(3deg) scale(1) translateX(0); }
         }
-
 
         .project-image-showcase img {
             display: block;
-            /*
-                Original image: 1021x606px
-                Menu in image (approx): x=360, y=65, w=300, h=475
-                Target display width for menu: 220px
-                Scale factor: 220 / 300 = 0.7333
-                Scaled image width: 1021 * 0.7333 = ~748px
-                Scaled image height: 606 * 0.7333 = ~444px
-                Offset X: -(360 * 0.7333) = ~-264px
-                Offset Y: -(65 * 0.7333) = ~-47.6px
-            */
-            width: 748px; /* Scaled original image width */
-            height: 444px; /* Scaled original image height */
-            transform: translate(-264px, -48px);
+            width: 100%; /* Bild füllt den Container */
+            height: auto;  /* Höhe automatisch anpassen, um Seitenverhältnis beizubehalten */
+            border-radius: 6px; /* Damit es in den abgerundeten Rahmen passt */
+            /* Kein transform: translate() mehr hier, da wir nicht croppen */
         }
 
 
-        .container {
+        .container { /* Der Haupt-Inhaltscontainer */
             width: 100%;
-            max-width: 1150px;
-            margin: 25px auto;
+            max-width: 950px; /* Ggf. etwas weniger, um Platz für das Bild zu lassen */
+            margin: 25px auto; /* Zentriert den Container horizontal */
+            /* Wichtig: Wenn das Bild links ist, braucht der Container ggf. margin-left, damit er nicht überlappt.
+               Die JS-Positionierung des Bildes versucht das zu berücksichtigen.
+               Alternativ könnte man body mit display:flex und justify-content: space-around arbeiten,
+               aber fixed positioning für das Bild ist oft einfacher für 3D-Effekte. */
             padding: 35px 45px;
             background: var(--bg-surface-translucent);
             backdrop-filter: blur(10px) brightness(0.9);
@@ -147,6 +136,8 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
+        /* ... (Restliches CSS für Info-Button, Header, Intro, Buttons, Footer, Modal, Scroll-to-Top bleibt identisch) ... */
+        
         .info-button-trigger {
             position: absolute;
             top: 22px;
@@ -230,8 +221,8 @@
             border-radius: var(--border-radius-md);
             font-weight: 500;
             font-size: 1.05em;
-            display: flex; /* Needed for align-items on content */
-            align-items: center; /* Vertically align content */
+            display: flex; 
+            align-items: center; 
             transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, background-color 0.25s ease-out;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 0 0 1px var(--border-faint);
             position: relative;
@@ -240,19 +231,18 @@
             transform: translateY(18px);
             animation: buttonPopUp 0.4s cubic-bezier(0.22, 1.5, 0.58, 1) forwards;
         }
-        .script-button .button-text-content { /* Wrapper for icon and text label */
+        .script-button .button-text-content { 
             display: flex;
             align-items: center;
             color: var(--text-primary);
-            z-index: 3; /* Ensure it's above stars and hover effects */
-            position: relative; /* For z-index to work */
+            z-index: 3; 
+            position: relative; 
         }
 
         @keyframes buttonPopUp {
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Staggered animation for buttons */
         .button-grid a:nth-child(1) { animation-delay: 0.9s; }
         .button-grid a:nth-child(2) { animation-delay: 0.95s; }
         .button-grid a:nth-child(3) { animation-delay: 1.0s; }
@@ -265,7 +255,7 @@
         .button-grid a:nth-child(10) { animation-delay: 1.35s; }
 
 
-        .script-button i { /* Styling for the icon within button-text-content */
+        .script-button i { 
             margin-right: 12px;
             font-size: 1.15em;
             width: 22px;
@@ -274,7 +264,7 @@
             transition: color 0.3s ease, transform 0.3s ease;
         }
 
-        .script-button::before { /* Glow/border effect, behind text content */
+        .script-button::before { 
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -287,17 +277,16 @@
 
         .script-button:hover {
             transform: translateY(-4px);
-            background-color: var(--bg-surface); /* Keep background dark */
+            background-color: var(--bg-surface); 
             box-shadow: 0 6px 18px rgba(0,0,0,0.4), 0 0 12px var(--accent-glow);
         }
-        .script-button:hover::before { opacity: 0.1; } /* Subtle glow */
+        .script-button:hover::before { opacity: 0.1; } 
         .script-button:hover i {
             color: var(--accent-light-teal);
             transform: scale(1.12);
         }
 
 
-        /* Stars in buttons */
         .script-button .star {
             position: absolute;
             background-color: rgba(255,255,255,0.6);
@@ -305,7 +294,7 @@
             opacity: 0;
             animation: floatStarInButton 5s infinite ease-in-out;
             pointer-events: none;
-            z-index: 2; /* Above ::before, below text-content */
+            z-index: 2; 
         }
         .script-button .star.s1 { width: 1.5px; height: 1.5px; animation-delay: 0s; }
         .script-button .star.s2 { width: 2px; height: 2px; animation-delay: -1.5s; }
@@ -341,7 +330,6 @@
             text-shadow: 0 0 6px var(--accent-glow);
         }
 
-        /* Modal Styles */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -406,7 +394,6 @@
             transform: rotate(90deg);
         }
 
-        /* Scroll-to-Top Button */
         .scroll-to-top {
             position: fixed;
             bottom: 25px;
@@ -439,8 +426,7 @@
         }
 
 
-        /* Media Queries */
-        @media (max-width: 1200px) { /* Hide showcase image when not enough space */
+        @media (max-width: 1200px) { 
              .project-image-showcase {
                 display: none;
              }
@@ -459,13 +445,14 @@
             .site-header h1 { font-size: clamp(1.9em, 5.5vw, 2.6em); }
             .info-button-trigger {top: 12px; left: 12px;}
         }
+
     </style>
 </head>
 <body>
     <div id="snowfall-container"></div>
 
     <div class="project-image-showcase" id="projectShowcaseImage">
-        <img src="https://i.imgur.com/ym7AgX7.png" alt="Kour.io Cheat Project Preview">
+        <img src="https://i.imgur.com/ym7AgX7.png" alt="Kour.io Project Preview">
     </div>
 
     <div class="container">
@@ -496,6 +483,7 @@
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
 
+            <!-- ... (Restliche Buttons bleiben gleich, mit dem <span class="button-text-content"> Wrapper) ... -->
             <!-- Button 3 -->
             <a href="YOUR_LINK_HERE_3" class="script-button" title="Control your video streams">
                 <span class="button-text-content"><i class="fab fa-youtube"></i>Video Stream Controller</span>
@@ -629,35 +617,36 @@
 
         // Snowfall Animation
         const snowfallContainer = document.getElementById('snowfall-container');
-        const numberOfSnowflakes = 60; // Adjusted for larger flakes
+        const numberOfSnowflakes = 70; // Anzahl für größere Flocken
 
         if (snowfallContainer) {
             for (let i = 0; i < numberOfSnowflakes; i++) {
                 const snowflake = document.createElement('div');
                 snowflake.classList.add('snowflake');
 
-                const size = Math.random() * 6 + 4; // Snowflake size between 4px and 10px
+                const size = Math.random() * 6 + 4; // Größe: 4px bis 10px
                 snowflake.style.width = `${size}px`;
                 snowflake.style.height = `${size}px`;
                 
-                const startX = `${Math.random() * 100}vw`;
-                snowflake.style.left = startX; // Initial horizontal position
-                snowflake.style.setProperty('--start-x', '0px'); // Relative to its initial 'left'
+                const initialX = Math.random() * 100; // vw
+                snowflake.style.left = `${initialX}vw`; 
+                snowflake.style.setProperty('--start-x', `${initialX}vw`);
 
-                const duration = Math.random() * 10 + 8; // 8 to 18 seconds fall time
+
+                const duration = Math.random() * 10 + 8; 
                 snowflake.style.animationDuration = `${duration}s`;
 
-                const drift = (Math.random() - 0.5) * 150; // -75px to +75px horizontal drift
+                const drift = (Math.random() - 0.5) * 200; // -100px bis +100px Drift
                 snowflake.style.setProperty('--drift', `${drift}px`);
 
                 snowflake.style.animationDelay = `${Math.random() * duration}s`;
-                snowflake.style.opacity = Math.random() * 0.5 + 0.3; // 0.3 to 0.8
+                snowflake.style.opacity = Math.random() * 0.4 + 0.4; 
 
                 snowfallContainer.appendChild(snowflake);
             }
         }
 
-        // Minor randomization for button stars
+        // Button stars randomization
         document.querySelectorAll('.script-button .star').forEach(star => {
             const randomDelay = Math.random() * -4;
             const randomDuration = Math.random() * 2 + 4;
@@ -665,37 +654,31 @@
             star.style.animationDuration = `${randomDuration}s`;
         });
 
-        // Project image showcase positioning adjustment based on main container
-        // This is a bit more advanced and might need tweaking
+        // Project image showcase positioning
         const projectImageDiv = document.getElementById('projectShowcaseImage');
         const mainContainer = document.querySelector('.container');
 
         function positionProjectImage() {
-            if (projectImageDiv && mainContainer && window.innerWidth > 1200) { // Only if image is visible
+            if (projectImageDiv && mainContainer && window.innerWidth > 1200) { 
                 const containerRect = mainContainer.getBoundingClientRect();
-                const imageWidth = projectImageDiv.offsetWidth;
-                // Position to the left of the container with some gap
-                let leftPosition = containerRect.left - imageWidth - 40; // 40px gap
-                if (leftPosition < 20) leftPosition = 20; // Don't go too far off-screen
+                const imageWidthWithMargin = projectImageDiv.offsetWidth + 40; // Breite des Bildes + gewünschter Abstand
+                
+                let leftPosition = containerRect.left - imageWidthWithMargin;
+                if (leftPosition < 20) leftPosition = 20; 
                 
                 projectImageDiv.style.left = `${leftPosition}px`;
-                // Keep vertical centering
                 projectImageDiv.style.top = `50%`; 
-                projectImageDiv.style.transform = `translateY(-50%) perspective(1200px) rotateY(-25deg) rotateX(5deg) scale(0.9)`;
-            } else if (projectImageDiv) {
-                 // projectImageDiv.style.left = `-9999px`; // Hide it effectively if media query isn't enough
+                // Die transform-Werte sollten hier nicht überschrieben werden,
+                // es sei denn, die initiale Positionierung über CSS reicht nicht.
+                // projectImageDiv.style.transform = `translateY(-50%) perspective(1500px) rotateY(25deg) rotateX(3deg) scale(1)`;
             }
         }
         
-        // Call on load and resize
         window.addEventListener('load', positionProjectImage);
         window.addEventListener('resize', positionProjectImage);
-        // Initial call in case elements are ready before 'load'
         if (document.readyState === "complete" || document.readyState === "interactive") {
-            setTimeout(positionProjectImage, 100); // Small delay for layout to settle
+            setTimeout(positionProjectImage, 150); 
         }
-
-
     </script>
 </body>
 </html>
