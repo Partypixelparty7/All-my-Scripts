@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Partypixels Projects</title>
-    <!-- Font Awesome CDN Link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -24,10 +22,20 @@
             --border-radius-xl: 24px;
             --border-radius-lg: 16px;
             --border-radius-md: 10px;
-            --side-showcase-animation-delay: 1.5s;
-        }
+            
+            /* Skalierungsbasis - wird von JS beeinflusst */
+            --scale-factor: 1; /* Standard */
+            --base-font-size: 16px; /* Grundschriftgröße für body */
+            --dynamic-body-font-size: calc(var(--base-font-size) * var(--scale-factor));
 
-        /* ... (Restliches CSS von oben bleibt gleich) ... */
+            --project-image-base-width: 580px;
+            --snowman-base-width: 400px;
+            --dynamic-project-image-width: calc(var(--project-image-base-width) * var(--scale-factor));
+            --dynamic-snowman-width: calc(var(--snowman-base-width) * var(--scale-factor));
+
+            --side-showcase-animation-delay: 1.5s;
+            --side-element-top-offset: 80px; /* Wie weit von oben die Seitenelemente starten */
+        }
 
         body {
             font-family: var(--font-main);
@@ -42,21 +50,16 @@
             padding: 30px 15px;
             position: relative;
             animation: bodyGlobalFadeIn 0.4s ease-out;
+            font-size: var(--dynamic-body-font-size); /* Dynamische Schriftgröße */
         }
         @keyframes bodyGlobalFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         #snowfall-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: -1; overflow: hidden;
         }
-
-        .snowflake {
+        .snowflake { /* ... (bleibt gleich) ... */
             position: absolute;
             background-color: white;
             border-radius: 50%;
@@ -64,80 +67,69 @@
             pointer-events: none;
             animation: snowfall-animation linear infinite;
         }
-
         @keyframes snowfall-animation {
-            0% {
-                transform: translateY(-10vh) translateX(var(--start-x)) rotate(0deg);
-            }
-            100% {
-                transform: translateY(110vh) translateX(calc(var(--start-x) + var(--drift))) rotate(360deg);
-            }
+            0% { transform: translateY(-10vh) translateX(var(--start-x)) rotate(0deg); }
+            100% { transform: translateY(110vh) translateX(calc(var(--start-x) + var(--drift))) rotate(360deg); }
         }
+
 
         /* Common styles for side showcases */
         .side-showcase {
             position: fixed;
-            top: 50%;
-            /* width wird pro Element gesetzt */
+            top: var(--side-element-top-offset); /* OBEN ANGEZEIGT */
+            /* transform: translateY(0) anstatt translateY(-50%) wenn nicht mehr mittig */
             border-radius: 10px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.5);
             z-index: 0;
             opacity: 0;
             border: 1px solid var(--border-faint);
             background-color: var(--bg-surface);
-            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease-out;
+            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease-out, width 0.3s ease-out; /* width Transition für Skalierung */
             animation: sideShowcaseEntrance 1s ease-out var(--side-showcase-animation-delay) forwards;
         }
 
         @keyframes sideShowcaseEntrance {
-            from { opacity: 0; transform: translateY(-50%) scale(0.85) translateX(var(--entrance-x, -60px)); }
-            to { opacity: 0.85; transform: translateY(-50%) scale(1) translateX(0); }
+            /* translateY(0) wenn es oben startet und nicht vertikal zentriert wird */
+            from { opacity: 0; transform: translateY(0) scale(0.85) translateX(var(--entrance-x, -60px)); }
+            to { opacity: 0.85; transform: translateY(0) scale(1) translateX(0); }
         }
 
-        /* Project Image Styling (Left) - ÜBERARBEITET */
+        /* Project Image Styling (Left) */
         .project-image-showcase {
-            width: 580px; /* GRÖSSER */
+            width: var(--dynamic-project-image-width); /* Dynamische Breite */
             --entrance-x: -60px; 
-            left: 30px; 
-            /* MINIMALER 3D Effekt nach RECHTS */
-            transform: translateY(-50%) perspective(2500px) rotateY(8deg) rotateX(2deg) scale(1);
+            left: 30px; /* Startposition, JS passt an */
+            transform: perspective(2500px) rotateY(8deg) rotateX(2deg); /* translateY entfernt, da top gesetzt wird */
             box-shadow: 10px 10px 35px rgba(0,0,0,0.6), 0 0 15px var(--accent-glow);
         }
         .project-image-showcase:hover{
-            transform: translateY(-50%) perspective(2500px) rotateY(4deg) rotateX(1deg) scale(1.03);
+            transform: perspective(2500px) rotateY(4deg) rotateX(1deg) scale(1.03);
             box-shadow: 5px 5px 30px rgba(0,0,0,0.5), 0 0 20px var(--accent-glow);
         }
         .project-image-showcase img {
-            display: block;
-            width: 100%; 
-            height: auto;  
-            border-radius: 8px; 
+            display: block; width: 100%; height: auto; border-radius: 8px; 
         }
 
-        /* Snowman Image Styling (Right) - ÜBERARBEITET */
+        /* Snowman Image Styling (Right) */
         .snowman-showcase {
-            width: 330px; /* GRÖSSER */
+            width: var(--dynamic-snowman-width); /* Dynamische Breite */
             --entrance-x: 60px; 
             right: 30px; /* Startposition, JS passt an */
-            transform: translateY(-50%) scale(1); 
+            transform: scale(1); /* translateY entfernt */
             padding: 8px; 
         }
         .snowman-showcase:hover {
-            transform: translateY(-50%) scale(1.05) rotate(3deg);
-             box-shadow: 0 5px 20px rgba(0,0,0,0.4), 0 0 15px var(--accent-glow);
+            transform: scale(1.05) rotate(3deg);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4), 0 0 15px var(--accent-glow);
         }
         .snowman-showcase img {
-            display: block;
-            width: 100%;
-            height: auto;
-            border-radius: 6px;
+            display: block; width: 100%; height: auto; border-radius: 6px;
         }
-
 
         .container { 
             width: 100%;
-            max-width: 850px; /* Weiter reduziert für mehr Platz an den Seiten */
-            margin: 25px auto; 
+            max-width: 850px; 
+            margin: var(--side-element-top-offset) auto 25px auto; /* Platz oben für Seitenelemente lassen */
             padding: 35px 45px;
             background: var(--bg-surface-translucent);
             backdrop-filter: blur(10px) brightness(0.9);
@@ -160,8 +152,9 @@
             position: absolute;
             top: 22px;
             left: 28px;
-            width: 38px;
-            height: 38px;
+            width: calc(38px * var(--scale-factor)); /* Skalierung für Info-Button */
+            height: calc(38px * var(--scale-factor));
+            font-size: calc(1.15em * var(--scale-factor));
             background-color: rgba(255,255,255,0.08);
             border: 1px solid var(--border-faint);
             color: var(--text-secondary);
@@ -169,7 +162,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.15em;
             cursor: pointer;
             text-decoration: none;
             transition: background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s;
@@ -189,8 +181,8 @@
             opacity: 0;
             animation: elementFadeInDelayed 0.6s ease-out 0.5s forwards;
         }
-        .site-header h1 {
-            font-size: clamp(2.3em, 5vw, 3.2em);
+        .site-header h1 { /* Schriftgröße kann hier auch mit clamp() und vw für bessere Skalierung versehen werden */
+            font-size: clamp(calc(2em * var(--scale-factor)), calc(5vw * var(--scale-factor)), calc(3.2em * var(--scale-factor)));
             font-weight: 700;
             margin-bottom: 12px;
             color: var(--text-primary);
@@ -198,7 +190,7 @@
             letter-spacing: 0.5px;
         }
         .site-header .subtitle {
-            font-size: clamp(0.95em, 2.2vw, 1.15em);
+            font-size: clamp(calc(0.9em * var(--scale-factor)), calc(2.2vw * var(--scale-factor)), calc(1.15em * var(--scale-factor)));
             color: var(--text-secondary);
             font-weight: 300;
             max-width: 650px;
@@ -207,38 +199,38 @@
 
         .intro-section {
             background: rgba(255,255,255,0.03);
-            padding: 22px 28px;
+            padding: calc(22px * var(--scale-factor)) calc(28px * var(--scale-factor));
             border-radius: var(--border-radius-lg);
-            margin-bottom: 40px;
+            margin-bottom: calc(40px * var(--scale-factor));
             text-align: center;
             border: 1px solid var(--border-faint);
             opacity: 0;
             animation: elementFadeInDelayed 0.6s ease-out 0.7s forwards;
         }
         .intro-section h2 {
-            font-size: 1.35em;
+            font-size: calc(1.35em * var(--scale-factor));
             color: var(--accent-light-teal);
             margin-bottom: 10px;
             font-weight: 600;
         }
         .intro-section p {
-            font-size: 0.95em;
+            font-size: calc(0.95em * var(--scale-factor));
             color: var(--text-secondary);
         }
 
         .button-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-            gap: 22px;
+            grid-template-columns: repeat(auto-fit, minmax(calc(270px * var(--scale-factor)), 1fr));
+            gap: calc(22px * var(--scale-factor));
         }
 
         .script-button {
             background: var(--bg-surface);
             text-decoration: none;
-            padding: 16px 22px;
+            padding: calc(16px * var(--scale-factor)) calc(22px * var(--scale-factor));
             border-radius: var(--border-radius-md);
             font-weight: 500;
-            font-size: 1.05em;
+            font-size: calc(1.05em * var(--scale-factor));
             display: flex; 
             align-items: center; 
             transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, background-color 0.25s ease-out;
@@ -274,9 +266,9 @@
 
 
         .script-button i { 
-            margin-right: 12px;
-            font-size: 1.15em;
-            width: 22px;
+            margin-right: calc(12px * var(--scale-factor));
+            font-size: calc(1.15em * var(--scale-factor));
+            width: calc(22px * var(--scale-factor));
             text-align: center;
             color: var(--accent-cool-blue);
             transition: color 0.3s ease, transform 0.3s ease;
@@ -314,9 +306,9 @@
             pointer-events: none;
             z-index: 2; 
         }
-        .script-button .star.s1 { width: 1.5px; height: 1.5px; animation-delay: 0s; }
-        .script-button .star.s2 { width: 2px; height: 2px; animation-delay: -1.5s; }
-        .script-button .star.s3 { width: 1px; height: 1px; animation-delay: -3s; }
+        .script-button .star.s1 { width: calc(1.5px * var(--scale-factor)); height: calc(1.5px * var(--scale-factor)); animation-delay: 0s; }
+        .script-button .star.s2 { width: calc(2px * var(--scale-factor)); height: calc(2px * var(--scale-factor)); animation-delay: -1.5s; }
+        .script-button .star.s3 { width: calc(1px * var(--scale-factor)); height: calc(1px * var(--scale-factor)); animation-delay: -3s; }
 
         @keyframes floatStarInButton {
             0%   { transform: translate(15%, 110%) scale(0.6); opacity: 0; }
@@ -327,11 +319,11 @@
 
         footer {
             text-align: center;
-            margin-top: 50px;
-            padding-top: 25px;
+            margin-top: calc(50px * var(--scale-factor));
+            padding-top: calc(25px * var(--scale-factor));
             border-top: 1px solid var(--border-faint);
             color: var(--text-secondary);
-            font-size: 0.85em;
+            font-size: calc(0.85em * var(--scale-factor));
             opacity: 0;
             animation: elementFadeInDelayed 0.6s ease-out 1.5s forwards;
         }
@@ -369,11 +361,11 @@
         }
         .modal-content {
             background-color: var(--bg-surface);
-            padding: 30px 35px;
+            padding: calc(30px * var(--scale-factor)) calc(35px * var(--scale-factor));
             border-radius: var(--border-radius-lg);
             box-shadow: 0 5px 25px var(--shadow-dark);
             border: 1px solid var(--border-faint);
-            max-width: 600px;
+            max-width: calc(600px * var(--scale-factor));
             width: 90%;
             position: relative;
             transform: scale(0.95) translateY(-10px);
@@ -386,24 +378,24 @@
         }
         .modal-content h2 {
             color: var(--accent-light-teal);
-            margin-bottom: 15px;
-            font-size: 1.6em;
+            margin-bottom: calc(15px * var(--scale-factor));
+            font-size: calc(1.6em * var(--scale-factor));
         }
         .modal-content p, .modal-content ul {
             color: var(--text-secondary);
-            margin-bottom: 10px;
-            font-size: 0.95em;
+            margin-bottom: calc(10px * var(--scale-factor));
+            font-size: calc(0.95em * var(--scale-factor));
         }
         .modal-content ul { list-style-position: inside; padding-left: 5px; }
-        .modal-content li { margin-bottom: 5px; }
+        .modal-content li { margin-bottom: calc(5px * var(--scale-factor)); }
 
         .modal-close-button {
             position: absolute;
-            top: 15px; right: 15px;
+            top: calc(15px * var(--scale-factor)); right: calc(15px * var(--scale-factor));
             background: none;
             border: none;
             color: var(--text-secondary);
-            font-size: 1.8em;
+            font-size: calc(1.8em * var(--scale-factor));
             cursor: pointer;
             transition: color 0.3s ease, transform 0.3s ease;
         }
@@ -414,17 +406,17 @@
 
         .scroll-to-top {
             position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 45px;
-            height: 45px;
+            bottom: calc(25px * var(--scale-factor));
+            right: calc(25px * var(--scale-factor));
+            width: calc(45px * var(--scale-factor));
+            height: calc(45px * var(--scale-factor));
+            font-size: calc(1.3em * var(--scale-factor));
             background-color: var(--accent-cool-blue);
             color: var(--bg-deep-dark);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3em;
             text-decoration: none;
             box-shadow: 0 3px 10px var(--shadow-dark);
             opacity: 0;
@@ -443,27 +435,25 @@
             transform: translateY(-3px) scale(1.05);
         }
 
-        @media (max-width: 1550px) { /* Breakpoint leicht erhöht wegen größerer Seitenelemente */
-             .project-image-showcase, .snowman-showcase {
-                display: none;
+
+        @media (max-width: 1600px) { /* Erhöhter Breakpoint für das Ausblenden der Seitenelemente */
+             .side-showcase { /* project-image-showcase und snowman-showcase erben hiervon */
+                visibility: hidden; /* Besser als display:none für JS-Berechnungen, falls noch aktiv */
+                opacity: 0;
+                pointer-events: none;
              }
              .container {
-                 max-width: 950px; 
+                 max-width: 950px; /* Standardbreite, wenn Seitenelemente weg sind */
+                 margin: 25px auto; /* Standard Margin */
              }
         }
         @media (max-width: 768px) {
-            .container { padding: 30px 20px; max-width: 95%; }
-            .button-grid { grid-template-columns: 1fr; }
-            .script-button { padding: 15px 20px; font-size: 1em; }
-            .info-button-trigger { top: 18px; left: 18px; width:35px; height:35px; font-size: 1.05em;}
-            .modal-content { padding: 25px; }
-            .scroll-to-top { width: 40px; height: 40px; font-size: 1.1em; bottom: 20px; right: 20px;}
+            .container { padding: 30px 20px; max-width: 95%; margin: 15px auto; }
+            /* Weitere Anpassungen für kleinere Bildschirme, Skalierung hier evtl. weniger stark */
         }
         @media (max-width: 480px) {
-            body { padding: 20px 10px; }
+            body { padding: 20px 10px; /* Skalierung hier prüfen */ }
             .container { padding: 25px 15px; margin-top: 15px; }
-            .site-header h1 { font-size: clamp(1.9em, 5.5vw, 2.6em); }
-            .info-button-trigger {top: 12px; left: 12px;}
         }
 
     </style>
@@ -500,56 +490,39 @@
                 <span class="button-text-content"><i class="fas fa-terminal"></i>My First Power Script</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
-
-            <!-- Button 2 -->
+            <!-- ... (restliche Buttons) ... -->
             <a href="YOUR_LINK_HERE_2" class="script-button" title="Explore Project Optimizer">
                 <span class="button-text-content"><i class="fas fa-microchip"></i>Project "Optimizer"</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
-            <!-- ... (Restliche Buttons bleiben gleich) ... -->
-            <!-- Button 3 -->
             <a href="YOUR_LINK_HERE_3" class="script-button" title="Control your video streams">
                 <span class="button-text-content"><i class="fab fa-youtube"></i>Video Stream Controller</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
-
-            <!-- Button 4 -->
             <a href="YOUR_LINK_HERE_4" class="script-button" title="Engage the Dynamic Theme Engine">
                 <span class="button-text-content"><i class="fas fa-adjust"></i>Dynamic Theme Engine</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
-
-            <!-- Button 5 -->
             <a href="YOUR_LINK_HERE_5" class="script-button" title="Access Web Toolkit Pro">
                 <span class="button-text-content"><i class="fas fa-wrench"></i>Web Toolkit Pro</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
-            
-            <!-- Button 6 -->
             <a href="YOUR_LINK_HERE_6" class="script-button" title="Activate Privacy Guard">
                 <span class="button-text-content"><i class="fas fa-shield-alt"></i>Privacy Guard Script</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
-
-            <!-- Button 7 -->
             <a href="YOUR_LINK_HERE_7" class="script-button" title="Use Stealth Mode Utility">
                 <span class="button-text-content"><i class="fas fa-user-secret"></i>Stealth Mode Utility</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
-
-            <!-- Button 8 -->
             <a href="YOUR_LINK_HERE_8" class="script-button" title="Enhance UI with Deluxe tools">
                 <span class="button-text-content"><i class="fas fa-magic"></i>UI Enhancer Deluxe</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
-
-            <!-- Button 9 -->
             <a href="YOUR_LINK_HERE_9" class="script-button" title="Boost your productivity">
                 <span class="button-text-content"><i class="fas fa-hands-helping"></i>Productivity Booster</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
-
-            <!-- Button 10 -->
             <a href="YOUR_LINK_HERE_10" class="script-button" title="Load content lightning fast">
                 <span class="button-text-content"><i class="fas fa-bolt"></i>Lightning Fast Loader</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
@@ -564,7 +537,7 @@
         </footer>
     </div>
 
-    <!-- Modal Structure -->
+    <!-- Modal Structure (bleibt gleich) -->
     <div class="modal-overlay" id="infoModalOverlay">
         <div class="modal-content">
             <button class="modal-close-button" id="modalCloseButton" aria-label="Close modal">×</button>
@@ -583,7 +556,7 @@
         </div>
     </div>
 
-    <!-- Scroll-to-Top Button -->
+    <!-- Scroll-to-Top Button (bleibt gleich) -->
     <a href="#" class="scroll-to-top" id="scrollToTopButton" title="Scroll back to top">
         <i class="fas fa-arrow-up"></i>
     </a>
@@ -592,128 +565,120 @@
         // Set current year in footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // Modal functionality
+        // Modal functionality (bleibt gleich)
         const infoButton = document.getElementById('infoButton');
         const modalOverlay = document.getElementById('infoModalOverlay');
         const modalCloseButton = document.getElementById('modalCloseButton');
-
-        function openModal() {
-            if (modalOverlay) modalOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            if (modalOverlay) modalOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
+        function openModal() { if (modalOverlay) modalOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeModal() { if (modalOverlay) modalOverlay.classList.remove('active'); document.body.style.overflow = ''; }
         if (infoButton && modalOverlay && modalCloseButton) {
             infoButton.addEventListener('click', openModal);
             modalCloseButton.addEventListener('click', closeModal);
-            modalOverlay.addEventListener('click', function(event) {
-                if (event.target === modalOverlay) {
-                    closeModal();
-                }
-            });
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                    closeModal();
-                }
-            });
+            modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modalOverlay.classList.contains('active')) closeModal(); });
         }
 
-        // Scroll-to-Top button functionality
+        // Scroll-to-Top button functionality (bleibt gleich)
         const scrollToTopButton = document.getElementById('scrollToTopButton');
         if (scrollToTopButton) {
-            window.addEventListener('scroll', () => {
-                if (window.pageYOffset > 200) {
-                    scrollToTopButton.classList.add('visible');
-                } else {
-                    scrollToTopButton.classList.remove('visible');
-                }
-            });
-            scrollToTopButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
+            window.addEventListener('scroll', () => { scrollToTopButton.classList.toggle('visible', window.pageYOffset > 200); });
+            scrollToTopButton.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
         }
 
-        // Snowfall Animation
+        // Snowfall Animation (bleibt gleich)
         const snowfallContainer = document.getElementById('snowfall-container');
         const numberOfSnowflakes = 70; 
-
         if (snowfallContainer) {
             for (let i = 0; i < numberOfSnowflakes; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.classList.add('snowflake');
-                const size = Math.random() * 6 + 4; 
-                snowflake.style.width = `${size}px`;
-                snowflake.style.height = `${size}px`;
-                const initialX = Math.random() * 100; 
-                snowflake.style.left = `${initialX}vw`; 
-                snowflake.style.setProperty('--start-x', `${initialX}vw`);
-                const duration = Math.random() * 10 + 8; 
-                snowflake.style.animationDuration = `${duration}s`;
-                const drift = (Math.random() - 0.5) * 200; 
-                snowflake.style.setProperty('--drift', `${drift}px`);
-                snowflake.style.animationDelay = `${Math.random() * duration}s`;
-                snowflake.style.opacity = Math.random() * 0.4 + 0.4; 
-                snowfallContainer.appendChild(snowflake);
+                const sf = document.createElement('div'); sf.classList.add('snowflake');
+                const sz = Math.random()*6+4; sf.style.width=`${sz}px`; sf.style.height=`${sz}px`;
+                const iX = Math.random()*100; sf.style.left=`${iX}vw`; sf.style.setProperty('--start-x',`${iX}vw`);
+                const dur = Math.random()*10+8; sf.style.animationDuration=`${dur}s`;
+                const drf = (Math.random()-.5)*200; sf.style.setProperty('--drift',`${drf}px`);
+                sf.style.animationDelay=`${Math.random()*dur}s`; sf.style.opacity=Math.random()*.4+.4; 
+                snowfallContainer.appendChild(sf);
             }
         }
 
-        // Button stars randomization
-        document.querySelectorAll('.script-button .star').forEach(star => {
-            const randomDelay = Math.random() * -4;
-            const randomDuration = Math.random() * 2 + 4;
-            star.style.animationDelay = `${randomDelay}s`;
-            star.style.animationDuration = `${randomDuration}s`;
+        // Button stars randomization (bleibt gleich)
+        document.querySelectorAll('.script-button .star').forEach(s => {
+            s.style.animationDelay = `${Math.random()*-4}s`; s.style.animationDuration = `${Math.random()*2+4}s`;
         });
 
-        // Side Elements Positioning
+        // --- Dynamic Scaling and Positioning ---
+        const root = document.documentElement;
         const projectImageDiv = document.getElementById('projectShowcaseImage');
         const snowmanDiv = document.getElementById('snowmanShowcase');
         const mainContainer = document.querySelector('.container');
-        const sideElementsGap = 30; // Reduzierter Abstand für Schneemann weiter rechts
-        const screenEdgeMargin = 20; // Mindestabstand zum Bildschirmrand
+        const screenEdgeMargin = 30; // Minimaler Abstand der Seitenelemente zum Bildschirmrand
 
+        function calculateScaleFactor() {
+            const viewportWidth = window.innerWidth;
+            let scale = 1;
+            // Beispiel: Skalierung beginnt unter 1920px, linear bis zu einem Min-Faktor bei 1024px
+            if (viewportWidth < 1920 && viewportWidth > 1024) {
+                scale = 0.8 + 0.2 * (viewportWidth - 1024) / (1920 - 1024);
+            } else if (viewportWidth <= 1024) {
+                scale = 0.8; // Minimaler Skalierungsfaktor
+            }
+            // Für sehr große Bildschirme könnte man auch leicht hochskalieren
+            // else if (viewportWidth > 2000) {
+            //     scale = 1.05;
+            // }
+            root.style.setProperty('--scale-factor', scale.toFixed(2));
+        }
+        
         function positionSideElements() {
-            if (mainContainer && window.innerWidth > 1550) { // Angepasster Breakpoint
+            calculateScaleFactor(); // Skalierungsfaktor zuerst berechnen
+
+            const currentScaleFactor = parseFloat(getComputedStyle(root).getPropertyValue('--scale-factor'));
+
+            if (mainContainer && window.innerWidth > (1600 * currentScaleFactor)) { // Breakpoint auch skalieren?
                 const containerRect = mainContainer.getBoundingClientRect();
                 
                 if (projectImageDiv) {
-                    const imageWidth = projectImageDiv.offsetWidth;
-                    let leftPosition = containerRect.left - imageWidth - sideElementsGap;
+                    projectImageDiv.style.visibility = 'visible';
+                    projectImageDiv.style.opacity = '0.85'; // Sicherstellen, dass es sichtbar wird
+                    const imageWidth = projectImageDiv.offsetWidth; // Breite nach Skalierung abfragen
+                    const spaceLeft = containerRect.left - screenEdgeMargin;
+                    // Zentriert im linken Freiraum
+                    let leftPosition = screenEdgeMargin + (spaceLeft - imageWidth) / 2;
                     if (leftPosition < screenEdgeMargin) leftPosition = screenEdgeMargin; 
                     projectImageDiv.style.left = `${leftPosition}px`;
-                    projectImageDiv.style.visibility = 'visible';
                 }
 
                 if (snowmanDiv) {
-                    const snowmanWidth = snowmanDiv.offsetWidth;
-                    let rightPosition = window.innerWidth - containerRect.right - snowmanWidth - sideElementsGap;
-                    if (rightPosition < screenEdgeMargin) rightPosition = screenEdgeMargin; 
-                    
-                    snowmanDiv.style.right = `${rightPosition}px`;
-                    snowmanDiv.style.left = 'auto'; 
                     snowmanDiv.style.visibility = 'visible';
+                    snowmanDiv.style.opacity = '0.85';
+                    const snowmanWidth = snowmanDiv.offsetWidth;
+                    const spaceRight = window.innerWidth - containerRect.right - screenEdgeMargin;
+                    // Zentriert im rechten Freiraum
+                    let rightTargetPosition = screenEdgeMargin + (spaceRight - snowmanWidth) / 2;
+                    if (rightTargetPosition < screenEdgeMargin) rightTargetPosition = screenEdgeMargin; 
+                    
+                    snowmanDiv.style.right = `${rightTargetPosition}px`;
+                    snowmanDiv.style.left = 'auto'; 
                 }
 
             } else { 
-                if (projectImageDiv) projectImageDiv.style.visibility = 'hidden';
-                if (snowmanDiv) snowmanDiv.style.visibility = 'hidden';
+                if (projectImageDiv) {
+                    projectImageDiv.style.visibility = 'hidden';
+                    projectImageDiv.style.opacity = '0';
+                }
+                if (snowmanDiv) {
+                    snowmanDiv.style.visibility = 'hidden';
+                    snowmanDiv.style.opacity = '0';
+                }
             }
         }
         
         window.addEventListener('load', positionSideElements);
         window.addEventListener('resize', positionSideElements);
-        // Call after a short delay to ensure layout is mostly stable
         if (document.readyState === "complete" || document.readyState === "interactive") {
            setTimeout(positionSideElements, 250);
         } else {
             window.addEventListener('DOMContentLoaded', () => setTimeout(positionSideElements, 250));
         }
-
     </script>
 </body>
 </html>
