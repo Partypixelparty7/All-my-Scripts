@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Partypixelparty7 Scripts</title>
-    <!-- HIER FONT AWESOME CDN LINK EINFÜGEN, falls noch nicht geschehen -->
+    <!-- Font Awesome CDN Link - Bereits eingefügt -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -249,9 +249,7 @@
             .container {
                 padding: 25px 20px;
             }
-            .site-header h1 {
-                /* font-size: 2.5em; */ /* Bereits durch clamp() abgedeckt */
-            }
+            /* site-header h1 font-size wird bereits durch clamp() gehandhabt */
             .button-grid {
                 grid-template-columns: 1fr;
             }
@@ -267,9 +265,7 @@
                 padding: 20px 15px;
                  margin-top: 10px;
             }
-            .site-header h1 {
-                 /* font-size: 2em; */ /* Bereits durch clamp() abgedeckt */
-            }
+            /* site-header h1 font-size wird bereits durch clamp() gehandhabt */
             .intro-section { padding: 20px; }
         }
     </style>
@@ -287,12 +283,14 @@
         </section>
 
         <main class="button-grid">
-            <!-- ANLEITUNG:
+            <!-- ANLEITUNG ZUM ANPASSEN DER KNÖPFE:
                 Für jeden Knopf:
-                1. Ändere den Text innerhalb des <a>-Tags (nach dem <i>-Tag und vor </a>) für die Beschriftung.
-                2. Ändere den Wert von href="..." auf den Link zu deinem Script/Projekt.
-                3. Ändere die Font Awesome Icon-Klasse (z.B. "fas fa-code") nach Bedarf. 
-                   Eine gute Quelle für Icons: https://fontawesome.com/search?m=free
+                1. Link ändern: Ersetze "DEIN_LINK_HIER_X" im href="..." Attribut.
+                2. Beschriftung ändern: Ersetze den Kommentartext "<!-- Hier Knopf X Beschriftung ändern -->" 
+                   und den darauffolgenden Beispieltext (z.B. "Mein erstes Super-Script") 
+                   mit deiner gewünschten Beschriftung.
+                3. Icon ändern (optional): Ändere die Font Awesome Klasse im <i>-Tag (z.B. "fas fa-code").
+                   Finde passende Icons auf: https://fontawesome.com/search?m=free
             -->
 
             <!-- Knopf 1 -->
@@ -379,7 +377,12 @@
 
         <footer>
             <p>© <span id="currentYear"></span> Partypixelparty7. Alle Rechte vorbehalten. Erstellt mit <i class="fas fa-heart" style="color: var(--secondary-accent);"></i>.
-            <br>Diese Seite findest du auch auf <a href="https://github.com/DEIN_GITHUB_USERNAME/DEIN_REPO_NAME" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+            <br>
+            <!-- ANLEITUNG ZUM ANPASSEN DES GITHUB-LINKS:
+                 Ersetze "DEIN_GITHUB_USERNAME" und "DEIN_REPO_NAME" mit deinen tatsächlichen GitHub-Daten.
+            -->
+            Diese Seite findest du auch auf <a href="https://github.com/DEIN_GITHUB_USERNAME/DEIN_REPO_NAME" target="_blank" rel="noopener noreferrer">GitHub</a>.
+            </p>
         </footer>
     </div>
 
