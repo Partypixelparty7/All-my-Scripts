@@ -23,9 +23,8 @@
             --border-radius-lg: 16px;
             --border-radius-md: 10px;
             
-            /* Skalierungsbasis - wird von JS beeinflusst */
-            --scale-factor: 1; /* Standard */
-            --base-font-size: 16px; /* Grundschriftgröße für body */
+            --scale-factor: 1; 
+            --base-font-size: 16px; 
             --dynamic-body-font-size: calc(var(--base-font-size) * var(--scale-factor));
 
             --project-image-base-width: 580px;
@@ -34,10 +33,10 @@
             --dynamic-snowman-width: calc(var(--snowman-base-width) * var(--scale-factor));
 
             --side-showcase-animation-delay: 1.5s;
-            --side-element-top-offset: 80px; /* Wie weit von oben die Seitenelemente starten */
+            --side-element-top-offset: 80px; 
         }
 
-        body {
+        body { /* ... (bleibt gleich) ... */
             font-family: var(--font-main);
             background-color: var(--bg-deep-dark);
             color: var(--text-primary);
@@ -50,11 +49,11 @@
             padding: 30px 15px;
             position: relative;
             animation: bodyGlobalFadeIn 0.4s ease-out;
-            font-size: var(--dynamic-body-font-size); /* Dynamische Schriftgröße */
+            font-size: var(--dynamic-body-font-size);
         }
         @keyframes bodyGlobalFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        #snowfall-container {
+        #snowfall-container { /* ... (bleibt gleich) ... */
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: -1; overflow: hidden;
@@ -72,39 +71,34 @@
             100% { transform: translateY(110vh) translateX(calc(var(--start-x) + var(--drift))) rotate(360deg); }
         }
 
-
         /* Common styles for side showcases */
         .side-showcase {
             position: fixed;
-            top: var(--side-element-top-offset); /* OBEN ANGEZEIGT */
-            /* transform: translateY(0) anstatt translateY(-50%) wenn nicht mehr mittig */
             border-radius: 10px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.5);
             z-index: 0;
-            opacity: 0;
+            opacity: 0; /* Initial unsichtbar */
+            visibility: hidden; /* Initial unsichtbar */
             border: 1px solid var(--border-faint);
             background-color: var(--bg-surface);
-            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease-out, width 0.3s ease-out; /* width Transition für Skalierung */
-            animation: sideShowcaseEntrance 1s ease-out var(--side-showcase-animation-delay) forwards;
-        }
-
-        @keyframes sideShowcaseEntrance {
-            /* translateY(0) wenn es oben startet und nicht vertikal zentriert wird */
-            from { opacity: 0; transform: translateY(0) scale(0.85) translateX(var(--entrance-x, -60px)); }
-            to { opacity: 0.85; transform: translateY(0) scale(1) translateX(0); }
+            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease-out, width 0.3s ease-out, opacity 0.4s ease-out, visibility 0.4s ease-out;
+            /* Animation wird jetzt durch JS getriggert oder direkt auf opacity/visibility*/
         }
 
         /* Project Image Styling (Left) */
         .project-image-showcase {
-            width: var(--dynamic-project-image-width); /* Dynamische Breite */
-            --entrance-x: -60px; 
-            left: 30px; /* Startposition, JS passt an */
-            transform: perspective(2500px) rotateY(8deg) rotateX(2deg); /* translateY entfernt, da top gesetzt wird */
-            box-shadow: 10px 10px 35px rgba(0,0,0,0.6), 0 0 15px var(--accent-glow);
+            width: var(--dynamic-project-image-width); 
+            left: 30px; 
+            top: var(--side-element-top-offset);
+            transform: perspective(2500px) rotateY(8deg) rotateX(2deg) translateX(-60px); /* Initial transform für Animation */
+            animation: projectImageEntrance 1s ease-out var(--side-showcase-animation-delay) forwards;
+        }
+        @keyframes projectImageEntrance {
+            from { opacity: 0; visibility: hidden; transform: perspective(2500px) rotateY(8deg) rotateX(2deg) translateX(-60px) scale(0.9); }
+            to { opacity: 0.85; visibility: visible; transform: perspective(2500px) rotateY(8deg) rotateX(2deg) translateX(0) scale(1); }
         }
         .project-image-showcase:hover{
             transform: perspective(2500px) rotateY(4deg) rotateX(1deg) scale(1.03);
-            box-shadow: 5px 5px 30px rgba(0,0,0,0.5), 0 0 20px var(--accent-glow);
         }
         .project-image-showcase img {
             display: block; width: 100%; height: auto; border-radius: 8px; 
@@ -112,24 +106,28 @@
 
         /* Snowman Image Styling (Right) */
         .snowman-showcase {
-            width: var(--dynamic-snowman-width); /* Dynamische Breite */
-            --entrance-x: 60px; 
-            right: 30px; /* Startposition, JS passt an */
-            transform: scale(1); /* translateY entfernt */
+            width: var(--dynamic-snowman-width); 
+            right: 30px; 
+            top: 50%; /* WIEDER VERTIKAL ZENTRIERT */
+            transform: translateY(-50%) scale(0.9) translateX(60px); /* Initial transform für Animation & Zentrierung */
             padding: 8px; 
+            animation: snowmanEntrance 1s ease-out var(--side-showcase-animation-delay) forwards;
+        }
+        @keyframes snowmanEntrance {
+            from { opacity: 0; visibility: hidden; transform: translateY(-50%) scale(0.9) translateX(60px); }
+            to { opacity: 0.85; visibility: visible; transform: translateY(-50%) scale(1) translateX(0); }
         }
         .snowman-showcase:hover {
-            transform: scale(1.05) rotate(3deg);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.4), 0 0 15px var(--accent-glow);
+            transform: translateY(-50%) scale(1.05) rotate(3deg);
         }
         .snowman-showcase img {
             display: block; width: 100%; height: auto; border-radius: 6px;
         }
 
-        .container { 
+        .container { /* ... (bleibt gleich) ... */
             width: 100%;
             max-width: 850px; 
-            margin: var(--side-element-top-offset) auto 25px auto; /* Platz oben für Seitenelemente lassen */
+            margin: var(--side-element-top-offset) auto 25px auto; 
             padding: 35px 45px;
             background: var(--bg-surface-translucent);
             backdrop-filter: blur(10px) brightness(0.9);
@@ -152,7 +150,7 @@
             position: absolute;
             top: 22px;
             left: 28px;
-            width: calc(38px * var(--scale-factor)); /* Skalierung für Info-Button */
+            width: calc(38px * var(--scale-factor));
             height: calc(38px * var(--scale-factor));
             font-size: calc(1.15em * var(--scale-factor));
             background-color: rgba(255,255,255,0.08);
@@ -166,7 +164,12 @@
             text-decoration: none;
             transition: background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s;
             z-index: 10;
-            animation: elementFadeInDelayed 0.5s ease-out 1.2s backwards;
+            opacity: 0; /* Wird durch elementFadeInDelayed animiert */
+            animation: elementFadeInDelayed 0.5s ease-out 1.2s forwards;
+        }
+        @keyframes elementFadeInDelayed { /* Stellt sicher, dass Elemente mit dieser Animation korrekt einblenden */
+            from { opacity: 0; transform: translateY(10px); } /* Optional: Leichter Slide-In */
+            to { opacity: 1; transform: translateY(0); }
         }
         .info-button-trigger:hover {
             background-color: var(--accent-cool-blue);
@@ -175,13 +178,14 @@
             box-shadow: 0 0 10px var(--accent-glow);
         }
 
-        .site-header {
+
+        .site-header { /* ... ( Animation bleibt elementFadeInDelayed, ggf. Delay anpassen ) ... */
             text-align: center;
             margin-bottom: 45px;
             opacity: 0;
             animation: elementFadeInDelayed 0.6s ease-out 0.5s forwards;
         }
-        .site-header h1 { /* Schriftgröße kann hier auch mit clamp() und vw für bessere Skalierung versehen werden */
+        .site-header h1 { /* ... (Skalierung bleibt) ... */
             font-size: clamp(calc(2em * var(--scale-factor)), calc(5vw * var(--scale-factor)), calc(3.2em * var(--scale-factor)));
             font-weight: 700;
             margin-bottom: 12px;
@@ -189,7 +193,7 @@
             text-shadow: 0 0 8px var(--accent-glow);
             letter-spacing: 0.5px;
         }
-        .site-header .subtitle {
+        .site-header .subtitle { /* ... (Skalierung bleibt) ... */
             font-size: clamp(calc(0.9em * var(--scale-factor)), calc(2.2vw * var(--scale-factor)), calc(1.15em * var(--scale-factor)));
             color: var(--text-secondary);
             font-weight: 300;
@@ -197,7 +201,7 @@
             margin: 0 auto;
         }
 
-        .intro-section {
+        .intro-section { /* ... ( Animation bleibt elementFadeInDelayed, ggf. Delay anpassen ) ... */
             background: rgba(255,255,255,0.03);
             padding: calc(22px * var(--scale-factor)) calc(28px * var(--scale-factor));
             border-radius: var(--border-radius-lg);
@@ -207,24 +211,24 @@
             opacity: 0;
             animation: elementFadeInDelayed 0.6s ease-out 0.7s forwards;
         }
-        .intro-section h2 {
+        .intro-section h2 { /* ... (Skalierung bleibt) ... */
             font-size: calc(1.35em * var(--scale-factor));
             color: var(--accent-light-teal);
             margin-bottom: 10px;
             font-weight: 600;
         }
-        .intro-section p {
+        .intro-section p { /* ... (Skalierung bleibt) ... */
             font-size: calc(0.95em * var(--scale-factor));
             color: var(--text-secondary);
         }
 
-        .button-grid {
+        .button-grid { /* ... (Skalierung bleibt) ... */
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(calc(270px * var(--scale-factor)), 1fr));
             gap: calc(22px * var(--scale-factor));
         }
 
-        .script-button {
+        .script-button { /* ... (ButtonPopUp Animation bleibt) ... */
             background: var(--bg-surface);
             text-decoration: none;
             padding: calc(16px * var(--scale-factor)) calc(22px * var(--scale-factor));
@@ -265,7 +269,7 @@
         .button-grid a:nth-child(10) { animation-delay: 1.35s; }
 
 
-        .script-button i { 
+        .script-button i { /* ... (Skalierung bleibt) ... */
             margin-right: calc(12px * var(--scale-factor));
             font-size: calc(1.15em * var(--scale-factor));
             width: calc(22px * var(--scale-factor));
@@ -297,7 +301,7 @@
         }
 
 
-        .script-button .star {
+        .script-button .star { /* ... (Skalierung bleibt) ... */
             position: absolute;
             background-color: rgba(255,255,255,0.6);
             border-radius: 50%;
@@ -317,7 +321,7 @@
             100% { transform: translate(85%, -10%) scale(1.1); opacity: 0; }
         }
 
-        footer {
+        footer { /* ... (Skalierung und Animation bleibt) ... */
             text-align: center;
             margin-top: calc(50px * var(--scale-factor));
             padding-top: calc(25px * var(--scale-factor));
@@ -326,9 +330,6 @@
             font-size: calc(0.85em * var(--scale-factor));
             opacity: 0;
             animation: elementFadeInDelayed 0.6s ease-out 1.5s forwards;
-        }
-        @keyframes elementFadeInDelayed {
-            to { opacity: 1; }
         }
         footer a {
             color: var(--accent-cool-blue);
@@ -340,7 +341,7 @@
             text-shadow: 0 0 6px var(--accent-glow);
         }
 
-        .modal-overlay {
+        .modal-overlay { /* ... (Modal Skalierung bleibt) ... */
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
@@ -404,7 +405,7 @@
             transform: rotate(90deg);
         }
 
-        .scroll-to-top {
+        .scroll-to-top { /* ... (Skalierung bleibt) ... */
             position: fixed;
             bottom: calc(25px * var(--scale-factor));
             right: calc(25px * var(--scale-factor));
@@ -436,23 +437,23 @@
         }
 
 
-        @media (max-width: 1600px) { /* Erhöhter Breakpoint für das Ausblenden der Seitenelemente */
-             .side-showcase { /* project-image-showcase und snowman-showcase erben hiervon */
-                visibility: hidden; /* Besser als display:none für JS-Berechnungen, falls noch aktiv */
+        @media (max-width: 1600px) { /* Breakpoint muss evtl. angepasst werden, je nach Skalierung */
+             .side-showcase {
+                /* CSS-seitig initial ausblenden, JS steuert Sichtbarkeit basierend auf Berechnungen */
                 opacity: 0;
+                visibility: hidden;
                 pointer-events: none;
              }
              .container {
-                 max-width: 950px; /* Standardbreite, wenn Seitenelemente weg sind */
-                 margin: 25px auto; /* Standard Margin */
+                 max-width: 950px; 
+                 margin: 25px auto; 
              }
         }
         @media (max-width: 768px) {
             .container { padding: 30px 20px; max-width: 95%; margin: 15px auto; }
-            /* Weitere Anpassungen für kleinere Bildschirme, Skalierung hier evtl. weniger stark */
         }
         @media (max-width: 480px) {
-            body { padding: 20px 10px; /* Skalierung hier prüfen */ }
+            body { padding: 20px 10px; }
             .container { padding: 25px 15px; margin-top: 15px; }
         }
 
@@ -485,12 +486,11 @@
         </section>
 
         <main class="button-grid">
-            <!-- Button 1 -->
+            <!-- Buttons wie zuvor -->
             <a href="YOUR_LINK_HERE_1" class="script-button" title="Get My First Power Script">
                 <span class="button-text-content"><i class="fas fa-terminal"></i>My First Power Script</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
-            <!-- ... (restliche Buttons) ... -->
             <a href="YOUR_LINK_HERE_2" class="script-button" title="Explore Project Optimizer">
                 <span class="button-text-content"><i class="fas fa-microchip"></i>Project "Optimizer"</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
@@ -610,38 +610,32 @@
         const projectImageDiv = document.getElementById('projectShowcaseImage');
         const snowmanDiv = document.getElementById('snowmanShowcase');
         const mainContainer = document.querySelector('.container');
-        const screenEdgeMargin = 30; // Minimaler Abstand der Seitenelemente zum Bildschirmrand
+        const screenEdgeMargin = 30; 
+        const sideElementsBreakpoint = 1600; // Breakpoint zum Ausblenden der Seitenelemente
 
         function calculateScaleFactor() {
             const viewportWidth = window.innerWidth;
             let scale = 1;
-            // Beispiel: Skalierung beginnt unter 1920px, linear bis zu einem Min-Faktor bei 1024px
             if (viewportWidth < 1920 && viewportWidth > 1024) {
-                scale = 0.8 + 0.2 * (viewportWidth - 1024) / (1920 - 1024);
+                scale = 0.85 + 0.15 * (viewportWidth - 1024) / (1920 - 1024); // Sanftere Skalierung
             } else if (viewportWidth <= 1024) {
-                scale = 0.8; // Minimaler Skalierungsfaktor
+                scale = 0.85; 
             }
-            // Für sehr große Bildschirme könnte man auch leicht hochskalieren
-            // else if (viewportWidth > 2000) {
-            //     scale = 1.05;
-            // }
-            root.style.setProperty('--scale-factor', scale.toFixed(2));
+            root.style.setProperty('--scale-factor', scale.toFixed(3));
         }
         
         function positionSideElements() {
-            calculateScaleFactor(); // Skalierungsfaktor zuerst berechnen
-
+            calculateScaleFactor(); 
             const currentScaleFactor = parseFloat(getComputedStyle(root).getPropertyValue('--scale-factor'));
 
-            if (mainContainer && window.innerWidth > (1600 * currentScaleFactor)) { // Breakpoint auch skalieren?
+            if (mainContainer && window.innerWidth > sideElementsBreakpoint) { 
                 const containerRect = mainContainer.getBoundingClientRect();
                 
                 if (projectImageDiv) {
                     projectImageDiv.style.visibility = 'visible';
-                    projectImageDiv.style.opacity = '0.85'; // Sicherstellen, dass es sichtbar wird
-                    const imageWidth = projectImageDiv.offsetWidth; // Breite nach Skalierung abfragen
+                    // projectImageDiv.style.opacity = '0.85'; // Wird durch Animation gehandhabt
+                    const imageWidth = projectImageDiv.offsetWidth; 
                     const spaceLeft = containerRect.left - screenEdgeMargin;
-                    // Zentriert im linken Freiraum
                     let leftPosition = screenEdgeMargin + (spaceLeft - imageWidth) / 2;
                     if (leftPosition < screenEdgeMargin) leftPosition = screenEdgeMargin; 
                     projectImageDiv.style.left = `${leftPosition}px`;
@@ -649,10 +643,9 @@
 
                 if (snowmanDiv) {
                     snowmanDiv.style.visibility = 'visible';
-                    snowmanDiv.style.opacity = '0.85';
+                    // snowmanDiv.style.opacity = '0.85'; // Wird durch Animation gehandhabt
                     const snowmanWidth = snowmanDiv.offsetWidth;
                     const spaceRight = window.innerWidth - containerRect.right - screenEdgeMargin;
-                    // Zentriert im rechten Freiraum
                     let rightTargetPosition = screenEdgeMargin + (spaceRight - snowmanWidth) / 2;
                     if (rightTargetPosition < screenEdgeMargin) rightTargetPosition = screenEdgeMargin; 
                     
@@ -663,22 +656,29 @@
             } else { 
                 if (projectImageDiv) {
                     projectImageDiv.style.visibility = 'hidden';
-                    projectImageDiv.style.opacity = '0';
+                    // projectImageDiv.style.opacity = '0';
                 }
                 if (snowmanDiv) {
                     snowmanDiv.style.visibility = 'hidden';
-                    snowmanDiv.style.opacity = '0';
+                    // snowmanDiv.style.opacity = '0';
                 }
             }
         }
         
-        window.addEventListener('load', positionSideElements);
-        window.addEventListener('resize', positionSideElements);
-        if (document.readyState === "complete" || document.readyState === "interactive") {
-           setTimeout(positionSideElements, 250);
-        } else {
-            window.addEventListener('DOMContentLoaded', () => setTimeout(positionSideElements, 250));
+        // Initial call and on resize/load
+        // Um Flackern zu vermeiden, rufen wir es einmal nach DOMContentLoaded und dann bei Load/Resize
+        function initialSetup() {
+            positionSideElements(); // Position before animations might start
         }
+
+        if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
+            initialSetup();
+        } else {
+            document.addEventListener("DOMContentLoaded", initialSetup);
+        }
+        window.addEventListener('load', positionSideElements); // Für Bilder etc.
+        window.addEventListener('resize', positionSideElements);
+
     </script>
 </body>
 </html>
