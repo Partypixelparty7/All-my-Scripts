@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Partypixels Projects</title> {/* NEUER TITEL */}
+    <title>Partypixels Projects</title>
     <!-- Font Awesome CDN Link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-deep-dark: #04060a; /* Even darker base for contrast with snow */
+            --bg-deep-dark: #04060a;
             --bg-surface: #0e1118;
             --bg-surface-translucent: rgba(14, 17, 24, 0.88);
-            --text-primary: #f0f2f5; /* Bright white */
+            --text-primary: #f0f2f5;
             --text-secondary: #bac0c7;
-            --accent-cool-blue: #00bfff; /* DeepSkyBlue */
-            --accent-light-teal: #48D1CC; /* MediumTurquoise */
+            --accent-cool-blue: #00bfff;
+            --accent-light-teal: #48D1CC;
             --accent-glow: rgba(0, 191, 255, 0.35);
-            --border-faint: rgba(255, 255, 255, 0.12); /* Slightly more visible border */
+            --border-faint: rgba(255, 255, 255, 0.12);
             --shadow-dark: rgba(0, 0, 0, 0.6);
             --font-main: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --border-radius-xl: 24px;
@@ -44,7 +44,7 @@
             overflow-x: hidden;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            align-items: flex-start; /* Start content at the top */
             min-height: 100vh;
             padding: 30px 15px;
             position: relative;
@@ -52,34 +52,78 @@
         }
         @keyframes bodyGlobalFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Schneefall-Hintergrund Container */
         #snowfall-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Wichtig, damit man durchklicken kann */
-            z-index: -1; /* Hinter dem Hauptinhalt */
-            overflow: hidden; /* Verhindert Scrollbalken durch Schneeflocken */
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
         }
 
         .snowflake {
             position: absolute;
             background-color: white;
             border-radius: 50%;
-            opacity: 0.8;
+            opacity: 0.7; /* Slightly less opaque for better blending */
             pointer-events: none;
             animation: snowfall-animation linear infinite;
         }
 
         @keyframes snowfall-animation {
             0% {
-                transform: translateY(-10vh) translateX(0px); /* Start above screen */
+                transform: translateY(-10vh) translateX(var(--start-x)) rotate(0deg);
             }
             100% {
-                transform: translateY(110vh) translateX(var(--drift)); /* End below screen with drift */
+                transform: translateY(110vh) translateX(calc(var(--start-x) + var(--drift))) rotate(360deg);
             }
+        }
+
+        /* Project Image Styling */
+        .project-image-showcase {
+            position: fixed; /* Fixed to viewport or absolute to body */
+            left: 50px; /* Adjust as needed */
+            top: 50%;
+            transform: translateY(-50%) perspective(1200px) rotateY(-25deg) rotateX(5deg) scale(0.9);
+            width: 220px; /* Approximate width of the menu in the image if displayed at this size */
+            height: 380px; /* Approximate height */
+            border-radius: 15px; /* Matches menu rounding */
+            overflow: hidden;
+            box-shadow: -10px 10px 30px rgba(0,0,0,0.5), 0 0 15px var(--accent-glow);
+            z-index: 0; /* Behind main container if it might overlap controls */
+            opacity: 0;
+            animation: projectImageEntrance 1s ease-out 1.5s forwards;
+            border: 1px solid var(--border-faint);
+            transition: transform 0.4s ease-out, box-shadow 0.4s ease-out;
+        }
+        .project-image-showcase:hover{
+            transform: translateY(-50%) perspective(1200px) rotateY(-15deg) rotateX(2deg) scale(0.95);
+            box-shadow: -5px 5px 25px rgba(0,0,0,0.4), 0 0 25px var(--accent-glow);
+        }
+
+        @keyframes projectImageEntrance {
+            from { opacity: 0; transform: translateY(-50%) perspective(1200px) rotateY(-25deg) rotateX(5deg) scale(0.8) translateX(-50px); }
+            to { opacity: 0.7; transform: translateY(-50%) perspective(1200px) rotateY(-25deg) rotateX(5deg) scale(0.9) translateX(0); }
+        }
+
+
+        .project-image-showcase img {
+            display: block;
+            /*
+                Original image: 1021x606px
+                Menu in image (approx): x=360, y=65, w=300, h=475
+                Target display width for menu: 220px
+                Scale factor: 220 / 300 = 0.7333
+                Scaled image width: 1021 * 0.7333 = ~748px
+                Scaled image height: 606 * 0.7333 = ~444px
+                Offset X: -(360 * 0.7333) = ~-264px
+                Offset Y: -(65 * 0.7333) = ~-47.6px
+            */
+            width: 748px; /* Scaled original image width */
+            height: 444px; /* Scaled original image height */
+            transform: translate(-264px, -48px);
         }
 
 
@@ -109,7 +153,7 @@
             left: 28px;
             width: 38px;
             height: 38px;
-            background-color: rgba(255,255,255,0.08); /* Slightly more opaque */
+            background-color: rgba(255,255,255,0.08);
             border: 1px solid var(--border-faint);
             color: var(--text-secondary);
             border-radius: 50%;
@@ -153,7 +197,7 @@
         }
 
         .intro-section {
-            background: rgba(255,255,255,0.03); /* Lighter intro background for contrast */
+            background: rgba(255,255,255,0.03);
             padding: 22px 28px;
             border-radius: var(--border-radius-lg);
             margin-bottom: 40px;
@@ -186,9 +230,8 @@
             border-radius: var(--border-radius-md);
             font-weight: 500;
             font-size: 1.05em;
-            text-align: left;
-            display: flex;
-            align-items: center;
+            display: flex; /* Needed for align-items on content */
+            align-items: center; /* Vertically align content */
             transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, background-color 0.25s ease-out;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 0 0 1px var(--border-faint);
             position: relative;
@@ -197,13 +240,14 @@
             transform: translateY(18px);
             animation: buttonPopUp 0.4s cubic-bezier(0.22, 1.5, 0.58, 1) forwards;
         }
-        .script-button .button-content { /* Span für Text und Icon */
-            color: var(--text-primary);
+        .script-button .button-text-content { /* Wrapper for icon and text label */
             display: flex;
             align-items: center;
-            z-index: 2; /* Sicherstellen, dass der Inhalt über dem Hover-Effekt liegt */
-            position: relative;
+            color: var(--text-primary);
+            z-index: 3; /* Ensure it's above stars and hover effects */
+            position: relative; /* For z-index to work */
         }
+
         @keyframes buttonPopUp {
             to { opacity: 1; transform: translateY(0); }
         }
@@ -221,7 +265,7 @@
         .button-grid a:nth-child(10) { animation-delay: 1.35s; }
 
 
-        .script-button i {
+        .script-button i { /* Styling for the icon within button-text-content */
             margin-right: 12px;
             font-size: 1.15em;
             width: 22px;
@@ -230,29 +274,26 @@
             transition: color 0.3s ease, transform 0.3s ease;
         }
 
-        .script-button::after { /* Subtiler Hover-Effekt, liegt hinter dem Inhalt */
+        .script-button::before { /* Glow/border effect, behind text content */
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             border-radius: var(--border-radius-md);
             background: linear-gradient(145deg, var(--accent-cool-blue), var(--accent-light-teal));
             opacity: 0;
-            transition: opacity 0.3s ease-out;
-            z-index: 1; /* Liegt hinter button-content */
+            transition: opacity 0.35s ease-out;
+            z-index: 1; 
         }
 
         .script-button:hover {
             transform: translateY(-4px);
-            background-color: var(--bg-surface); /* Behält dunklen BG */
+            background-color: var(--bg-surface); /* Keep background dark */
             box-shadow: 0 6px 18px rgba(0,0,0,0.4), 0 0 12px var(--accent-glow);
         }
-        .script-button:hover::after { opacity: 0.15; } /* Leichter Schein statt voller Rand */
+        .script-button:hover::before { opacity: 0.1; } /* Subtle glow */
         .script-button:hover i {
             color: var(--accent-light-teal);
             transform: scale(1.12);
-        }
-        .script-button:hover .button-content {
-            /* Textfarbe könnte hier angepasst werden, wenn nötig, aber sollte durch z-index ok sein */
         }
 
 
@@ -264,7 +305,7 @@
             opacity: 0;
             animation: floatStarInButton 5s infinite ease-in-out;
             pointer-events: none;
-            z-index: 0; /* Hinter button-content */
+            z-index: 2; /* Above ::before, below text-content */
         }
         .script-button .star.s1 { width: 1.5px; height: 1.5px; animation-delay: 0s; }
         .script-button .star.s2 { width: 2px; height: 2px; animation-delay: -1.5s; }
@@ -305,7 +346,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-color: rgba(4, 6, 10, 0.85); /* var(--bg-deep-dark with alpha) */
+            background-color: rgba(4, 6, 10, 0.85);
             backdrop-filter: blur(6px);
             display: flex;
             align-items: center;
@@ -399,6 +440,11 @@
 
 
         /* Media Queries */
+        @media (max-width: 1200px) { /* Hide showcase image when not enough space */
+             .project-image-showcase {
+                display: none;
+             }
+        }
         @media (max-width: 768px) {
             .container { padding: 30px 20px; max-width: 95%; }
             .button-grid { grid-template-columns: 1fr; }
@@ -416,7 +462,11 @@
     </style>
 </head>
 <body>
-    <div id="snowfall-container"></div> {/* Container für Schneeflocken */}
+    <div id="snowfall-container"></div>
+
+    <div class="project-image-showcase" id="projectShowcaseImage">
+        <img src="https://i.imgur.com/ym7AgX7.png" alt="Kour.io Cheat Project Preview">
+    </div>
 
     <div class="container">
         <button class="info-button-trigger" id="infoButton" aria-label="Information" title="About this page">
@@ -424,7 +474,7 @@
         </button>
 
         <header class="site-header">
-            <h1>Partypixels Projects</h1> {/* TITEL GEÄNDERT */}
+            <h1>Partypixels Projects</h1>
             <p class="subtitle">Your central command for powerful userscripts and cutting-edge web experiments.</p>
         </header>
 
@@ -434,72 +484,63 @@
         </section>
 
         <main class="button-grid">
-            <!--
-                INSTRUCTIONS FOR CUSTOMIZING BUTTONS:
-                For each button:
-                1. Change Link: Replace "YOUR_LINK_HERE_X" in the href="..." attribute.
-                2. Change Label: Modify the text INSIDE the <span class="button-content"> ... </span> element, after the <i> icon.
-                3. Change Icon (Optional): Update the Font Awesome class in the <i> tag.
-                4. Change Tooltip: Modify the title="..." attribute.
-            -->
-
             <!-- Button 1 -->
             <a href="YOUR_LINK_HERE_1" class="script-button" title="Get My First Power Script">
-                <span class="button-content"><i class="fas fa-terminal"></i>My First Power Script</span>
+                <span class="button-text-content"><i class="fas fa-terminal"></i>My First Power Script</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
 
             <!-- Button 2 -->
             <a href="YOUR_LINK_HERE_2" class="script-button" title="Explore Project Optimizer">
-                <span class="button-content"><i class="fas fa-microchip"></i>Project "Optimizer"</span>
+                <span class="button-text-content"><i class="fas fa-microchip"></i>Project "Optimizer"</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
 
             <!-- Button 3 -->
             <a href="YOUR_LINK_HERE_3" class="script-button" title="Control your video streams">
-                <span class="button-content"><i class="fab fa-youtube"></i>Video Stream Controller</span>
+                <span class="button-text-content"><i class="fab fa-youtube"></i>Video Stream Controller</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
 
             <!-- Button 4 -->
             <a href="YOUR_LINK_HERE_4" class="script-button" title="Engage the Dynamic Theme Engine">
-                <span class="button-content"><i class="fas fa-adjust"></i>Dynamic Theme Engine</span>
+                <span class="button-text-content"><i class="fas fa-adjust"></i>Dynamic Theme Engine</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
 
             <!-- Button 5 -->
             <a href="YOUR_LINK_HERE_5" class="script-button" title="Access Web Toolkit Pro">
-                <span class="button-content"><i class="fas fa-wrench"></i>Web Toolkit Pro</span>
+                <span class="button-text-content"><i class="fas fa-wrench"></i>Web Toolkit Pro</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
             
             <!-- Button 6 -->
             <a href="YOUR_LINK_HERE_6" class="script-button" title="Activate Privacy Guard">
-                <span class="button-content"><i class="fas fa-shield-alt"></i>Privacy Guard Script</span>
+                <span class="button-text-content"><i class="fas fa-shield-alt"></i>Privacy Guard Script</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
 
             <!-- Button 7 -->
             <a href="YOUR_LINK_HERE_7" class="script-button" title="Use Stealth Mode Utility">
-                <span class="button-content"><i class="fas fa-user-secret"></i>Stealth Mode Utility</span>
+                <span class="button-text-content"><i class="fas fa-user-secret"></i>Stealth Mode Utility</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
 
             <!-- Button 8 -->
             <a href="YOUR_LINK_HERE_8" class="script-button" title="Enhance UI with Deluxe tools">
-                <span class="button-content"><i class="fas fa-magic"></i>UI Enhancer Deluxe</span>
+                <span class="button-text-content"><i class="fas fa-magic"></i>UI Enhancer Deluxe</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
 
             <!-- Button 9 -->
             <a href="YOUR_LINK_HERE_9" class="script-button" title="Boost your productivity">
-                <span class="button-content"><i class="fas fa-hands-helping"></i>Productivity Booster</span>
+                <span class="button-text-content"><i class="fas fa-hands-helping"></i>Productivity Booster</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
 
             <!-- Button 10 -->
             <a href="YOUR_LINK_HERE_10" class="script-button" title="Load content lightning fast">
-                <span class="button-content"><i class="fas fa-bolt"></i>Lightning Fast Loader</span>
+                <span class="button-text-content"><i class="fas fa-bolt"></i>Lightning Fast Loader</span>
                 <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
             </a>
         </main>
@@ -588,45 +629,73 @@
 
         // Snowfall Animation
         const snowfallContainer = document.getElementById('snowfall-container');
-        const numberOfSnowflakes = 80; // Adjust for density
+        const numberOfSnowflakes = 60; // Adjusted for larger flakes
 
         if (snowfallContainer) {
             for (let i = 0; i < numberOfSnowflakes; i++) {
                 const snowflake = document.createElement('div');
                 snowflake.classList.add('snowflake');
 
-                const size = Math.random() * 4 + 2; // Snowflake size between 2px and 6px
+                const size = Math.random() * 6 + 4; // Snowflake size between 4px and 10px
                 snowflake.style.width = `${size}px`;
                 snowflake.style.height = `${size}px`;
+                
+                const startX = `${Math.random() * 100}vw`;
+                snowflake.style.left = startX; // Initial horizontal position
+                snowflake.style.setProperty('--start-x', '0px'); // Relative to its initial 'left'
 
-                snowflake.style.left = `${Math.random() * 100}vw`; // Random horizontal start
-
-                // Random duration for falling speed
-                const duration = Math.random() * 8 + 7; // 7 to 15 seconds
+                const duration = Math.random() * 10 + 8; // 8 to 18 seconds fall time
                 snowflake.style.animationDuration = `${duration}s`;
 
-                // Random horizontal drift
-                const drift = (Math.random() - 0.5) * 100; // -50px to +50px drift
+                const drift = (Math.random() - 0.5) * 150; // -75px to +75px horizontal drift
                 snowflake.style.setProperty('--drift', `${drift}px`);
 
-
-                // Random delay to stagger snowflakes
                 snowflake.style.animationDelay = `${Math.random() * duration}s`;
-                
-                // Slightly vary opacity
-                snowflake.style.opacity = Math.random() * 0.4 + 0.4; // 0.4 to 0.8
+                snowflake.style.opacity = Math.random() * 0.5 + 0.3; // 0.3 to 0.8
 
                 snowfallContainer.appendChild(snowflake);
             }
         }
 
-        // Minor randomization for button stars (optional)
+        // Minor randomization for button stars
         document.querySelectorAll('.script-button .star').forEach(star => {
             const randomDelay = Math.random() * -4;
             const randomDuration = Math.random() * 2 + 4;
             star.style.animationDelay = `${randomDelay}s`;
             star.style.animationDuration = `${randomDuration}s`;
         });
+
+        // Project image showcase positioning adjustment based on main container
+        // This is a bit more advanced and might need tweaking
+        const projectImageDiv = document.getElementById('projectShowcaseImage');
+        const mainContainer = document.querySelector('.container');
+
+        function positionProjectImage() {
+            if (projectImageDiv && mainContainer && window.innerWidth > 1200) { // Only if image is visible
+                const containerRect = mainContainer.getBoundingClientRect();
+                const imageWidth = projectImageDiv.offsetWidth;
+                // Position to the left of the container with some gap
+                let leftPosition = containerRect.left - imageWidth - 40; // 40px gap
+                if (leftPosition < 20) leftPosition = 20; // Don't go too far off-screen
+                
+                projectImageDiv.style.left = `${leftPosition}px`;
+                // Keep vertical centering
+                projectImageDiv.style.top = `50%`; 
+                projectImageDiv.style.transform = `translateY(-50%) perspective(1200px) rotateY(-25deg) rotateX(5deg) scale(0.9)`;
+            } else if (projectImageDiv) {
+                 // projectImageDiv.style.left = `-9999px`; // Hide it effectively if media query isn't enough
+            }
+        }
+        
+        // Call on load and resize
+        window.addEventListener('load', positionProjectImage);
+        window.addEventListener('resize', positionProjectImage);
+        // Initial call in case elements are ready before 'load'
+        if (document.readyState === "complete" || document.readyState === "interactive") {
+            setTimeout(positionProjectImage, 100); // Small delay for layout to settle
+        }
+
+
     </script>
 </body>
 </html>
