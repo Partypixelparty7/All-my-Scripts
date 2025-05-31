@@ -24,8 +24,6 @@
             --border-radius-xl: 24px;
             --border-radius-lg: 16px;
             --border-radius-md: 10px;
-            /* Variables for side showcases */
-            --side-showcase-width: auto; /* Can be overridden */
             --side-showcase-animation-delay: 1.5s;
         }
 
@@ -80,7 +78,7 @@
         .side-showcase {
             position: fixed;
             top: 50%;
-            width: var(--side-showcase-width);
+            /* width wird pro Element gesetzt */
             border-radius: 10px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.5);
             z-index: 0;
@@ -98,15 +96,15 @@
 
         /* Project Image Styling (Left) - ÜBERARBEITET */
         .project-image-showcase {
-            --side-showcase-width: 550px; /* GRÖSSER */
-            --entrance-x: -60px; /* Specific entrance for left */
+            width: 580px; /* GRÖSSER */
+            --entrance-x: -60px; 
             left: 30px; 
-            /* Minimaler 3D Effekt nach RECHTS */
-            transform: translateY(-50%) perspective(2000px) rotateY(10deg) rotateX(1deg) scale(1);
+            /* MINIMALER 3D Effekt nach RECHTS */
+            transform: translateY(-50%) perspective(2500px) rotateY(8deg) rotateX(2deg) scale(1);
             box-shadow: 10px 10px 35px rgba(0,0,0,0.6), 0 0 15px var(--accent-glow);
         }
         .project-image-showcase:hover{
-            transform: translateY(-50%) perspective(2000px) rotateY(5deg) rotateX(0deg) scale(1.03);
+            transform: translateY(-50%) perspective(2500px) rotateY(4deg) rotateX(1deg) scale(1.03);
             box-shadow: 5px 5px 30px rgba(0,0,0,0.5), 0 0 20px var(--accent-glow);
         }
         .project-image-showcase img {
@@ -116,16 +114,16 @@
             border-radius: 8px; 
         }
 
-        /* Snowman Image Styling (Right) - NEU */
+        /* Snowman Image Styling (Right) - ÜBERARBEITET */
         .snowman-showcase {
-            --side-showcase-width: 200px; /* Adjust based on GIF size */
-            --entrance-x: 60px; /* Specific entrance for right */
-            right: 30px;
-            transform: translateY(-50%) scale(1); /* No initial 3D rotation for GIF */
-            padding: 5px; /* Optional padding around GIF */
+            width: 330px; /* GRÖSSER */
+            --entrance-x: 60px; 
+            right: 30px; /* Startposition, JS passt an */
+            transform: translateY(-50%) scale(1); 
+            padding: 8px; 
         }
         .snowman-showcase:hover {
-            transform: translateY(-50%) scale(1.05) rotate(2deg);
+            transform: translateY(-50%) scale(1.05) rotate(3deg);
              box-shadow: 0 5px 20px rgba(0,0,0,0.4), 0 0 15px var(--accent-glow);
         }
         .snowman-showcase img {
@@ -138,7 +136,7 @@
 
         .container { 
             width: 100%;
-            max-width: 900px; /* Slightly reduced to give more space to side elements */
+            max-width: 850px; /* Weiter reduziert für mehr Platz an den Seiten */
             margin: 25px auto; 
             padding: 35px 45px;
             background: var(--bg-surface-translucent);
@@ -445,13 +443,12 @@
             transform: translateY(-3px) scale(1.05);
         }
 
-
-        @media (max-width: 1450px) { /* Breakpoint anpassen, wann seitliche Elemente verschwinden */
+        @media (max-width: 1550px) { /* Breakpoint leicht erhöht wegen größerer Seitenelemente */
              .project-image-showcase, .snowman-showcase {
                 display: none;
              }
              .container {
-                 max-width: 950px; /* Zurück zur Standardbreite, wenn seitliche Elemente weg sind */
+                 max-width: 950px; 
              }
         }
         @media (max-width: 768px) {
@@ -595,7 +592,7 @@
         // Set current year in footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // Modal functionality (bleibt gleich)
+        // Modal functionality
         const infoButton = document.getElementById('infoButton');
         const modalOverlay = document.getElementById('infoModalOverlay');
         const modalCloseButton = document.getElementById('modalCloseButton');
@@ -625,7 +622,7 @@
             });
         }
 
-        // Scroll-to-Top button functionality (bleibt gleich)
+        // Scroll-to-Top button functionality
         const scrollToTopButton = document.getElementById('scrollToTopButton');
         if (scrollToTopButton) {
             window.addEventListener('scroll', () => {
@@ -641,7 +638,7 @@
             });
         }
 
-        // Snowfall Animation (bleibt gleich)
+        // Snowfall Animation
         const snowfallContainer = document.getElementById('snowfall-container');
         const numberOfSnowflakes = 70; 
 
@@ -665,7 +662,7 @@
             }
         }
 
-        // Button stars randomization (bleibt gleich)
+        // Button stars randomization
         document.querySelectorAll('.script-button .star').forEach(star => {
             const randomDelay = Math.random() * -4;
             const randomDuration = Math.random() * 2 + 4;
@@ -673,44 +670,50 @@
             star.style.animationDuration = `${randomDuration}s`;
         });
 
-        // Side Elements Positioning - ÜBERARBEITET
+        // Side Elements Positioning
         const projectImageDiv = document.getElementById('projectShowcaseImage');
         const snowmanDiv = document.getElementById('snowmanShowcase');
         const mainContainer = document.querySelector('.container');
-        const sideElementsGap = 40; // Gewünschter Abstand zum Hauptcontainer
+        const sideElementsGap = 30; // Reduzierter Abstand für Schneemann weiter rechts
+        const screenEdgeMargin = 20; // Mindestabstand zum Bildschirmrand
 
         function positionSideElements() {
-            if (mainContainer && window.innerWidth > 1450) { // Nur wenn genug Platz ist (siehe Media Query)
+            if (mainContainer && window.innerWidth > 1550) { // Angepasster Breakpoint
                 const containerRect = mainContainer.getBoundingClientRect();
                 
                 if (projectImageDiv) {
                     const imageWidth = projectImageDiv.offsetWidth;
                     let leftPosition = containerRect.left - imageWidth - sideElementsGap;
-                    if (leftPosition < 20) leftPosition = 20; // Mindestabstand zum Bildschirmrand
+                    if (leftPosition < screenEdgeMargin) leftPosition = screenEdgeMargin; 
                     projectImageDiv.style.left = `${leftPosition}px`;
+                    projectImageDiv.style.visibility = 'visible';
                 }
 
                 if (snowmanDiv) {
                     const snowmanWidth = snowmanDiv.offsetWidth;
-                    // Position rechts vom Container
-                    let rightBase = window.innerWidth - containerRect.right; // Platz rechts vom Container
-                    let rightPosition = rightBase - snowmanWidth - sideElementsGap;
-                    if (rightPosition < 20) rightPosition = 20; // Mindestabstand zum Bildschirmrand
+                    let rightPosition = window.innerWidth - containerRect.right - snowmanWidth - sideElementsGap;
+                    if (rightPosition < screenEdgeMargin) rightPosition = screenEdgeMargin; 
+                    
                     snowmanDiv.style.right = `${rightPosition}px`;
-                    snowmanDiv.style.left = `auto`; // Wichtig, um left zu überschreiben
+                    snowmanDiv.style.left = 'auto'; 
+                    snowmanDiv.style.visibility = 'visible';
                 }
 
-            } else { // Wenn nicht genug Platz, CSS Media Query sollte sie ausblenden
-                if (projectImageDiv) projectImageDiv.style.left = '-9999px'; // Sicherstellen, dass sie weg sind
-                if (snowmanDiv) snowmanDiv.style.left = '-9999px';
+            } else { 
+                if (projectImageDiv) projectImageDiv.style.visibility = 'hidden';
+                if (snowmanDiv) snowmanDiv.style.visibility = 'hidden';
             }
         }
         
         window.addEventListener('load', positionSideElements);
         window.addEventListener('resize', positionSideElements);
+        // Call after a short delay to ensure layout is mostly stable
         if (document.readyState === "complete" || document.readyState === "interactive") {
-            setTimeout(positionSideElements, 200); // Etwas längere Verzögerung für komplexere Layouts
+           setTimeout(positionSideElements, 250);
+        } else {
+            window.addEventListener('DOMContentLoaded', () => setTimeout(positionSideElements, 250));
         }
+
     </script>
 </body>
 </html>
